@@ -23,7 +23,7 @@ from link import Link
 ```python
 // Crie uma instância da classe "Link" passando o link desejado e o tipo de driver (Chrome ou Firefox).
 // O modo headless (opcional) define se o navegador será executado em modo headless (sem interface gráfica).
-linkInstance = Link(link="https://www.example.com", driver="Chrome", headless=true);
+linkInstance = Link(link="https://www.example.com", driver="Chrome", headless=true)
 ```
 
 3. Abrindo o link:
