@@ -23,59 +23,59 @@ from link import Link
 ```python
 // Crie uma instância da classe "Link" passando o link desejado e o tipo de driver (Chrome ou Firefox).
 // O modo headless (opcional) define se o navegador será executado em modo headless (sem interface gráfica).
-var linkInstance = new Link({ link: "https://www.example.com", driver: "Chrome", headless: true });
+linkInstance = Link(link="https://www.example.com", driver="Chrome", headless=true)
 ```
 
 3. Abrindo o link:
 
 ```python
 // Abre o link no navegador configurado.
-linkInstance.openLink();
+linkInstance.openLink()
 ```
 
 4. Interagindo com elementos da página:
 
 ```python
 // Espera até que um elemento seja clicável e então clica nele.
-linkInstance.clickElement({ elementXpath: "//button[@id='submit-button']" });
+linkInstance.clickElement(elementXpath="//button[@id='submit-button']")
 
 // Preenche um campo de texto com o texto especificado.
-linkInstance.sendKeys({ elementXpath: "//input[@name='username']", text: "my_username" });
+linkInstance.sendKeys(elementXpath="//input[@name='username']", text="my_username")
 
 // Limpa um campo de texto.
-linkInstance.clearField({ elementXpath: "//input[@name='password']" });
+linkInstance.clearField(elementXpath="//input[@name='password']")
 
 // Obtém o valor de um elemento (por exemplo, um campo de texto).
-var value = linkInstance.getValue({ elementXpath: "//input[@name='email']" });
+value = linkInstance.getValue(elementXpath="//input[@name='email']")
 ```
 
 5. Realizando ações do teclado:
 
 ```python
 // Pressiona a tecla Enter.
-linkInstance.pressEnter();
+linkInstance.pressEnter()
 
 // Pressiona a tecla Tab.
-linkInstance.pressTab();
+linkInstance.pressTab()
 
 // Pressiona a tecla Down.
-linkInstance.pressDown();
+linkInstance.pressDown()
 
 // Pressiona a tecla Up.
-linkInstance.pressUp();
+linkInstance.pressUp()
 ```
 
 6. Trabalhando com janelas e frames:
 
 ```python
 // Alterna para uma janela específica pelo índice.
-linkInstance.switchWindow({ index: 1 });
+linkInstance.switchWindow(index=1)
 
 // Alterna para um frame especificado pelo seletor CSS.
-linkInstance.switchSelector({ cssSelector: ".frame-class" });
+linkInstance.switchSelector(cssSelector=".frame-class")
 
 // Alterna para um frame especificado pelo XPath.
-linkInstance.switchFrameXpath({ xpath: "//iframe[@id='frame-id']" });
+linkInstance.switchFrameXpath(xpath="//iframe[@id='frame-id']")
 ```
 
 7. Outras ações:
@@ -85,13 +85,13 @@ linkInstance.switchFrameXpath({ xpath: "//iframe[@id='frame-id']" });
 linkInstance.maximize();
 
 // Espera até que um elemento seja visível e clicável e então clica nele.
-linkInstance.clickElement({ elementXpath: "//a[@class='link']" });
+linkInstance.clickElement(elementXpath="//a[@class='link']")
 
 // Fecha a instância do navegador.
-linkInstance.quitSite();
+linkInstance.quitSite()
 
 // Verifica se o elemento existe (True ou False).
-linkInstance.elementExist(xpath);
+linkInstance.elementExist(xpath)
 ```
 
 ## Considerações Finais
