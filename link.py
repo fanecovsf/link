@@ -72,6 +72,11 @@ class Link:
     def maximize(self):
         self.driver.maximize_window()
 
+    def switchToAlert(self):
+        new_driver = self.driver.switch_to.alert
+
+        return new_driver
+
     def waitElementClickable(self, elementXpath):
         try:
             WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, elementXpath)))
@@ -142,3 +147,4 @@ class Link:
             return True
         except:
             return False
+        
