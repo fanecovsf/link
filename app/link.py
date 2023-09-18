@@ -10,39 +10,21 @@ import time
 import os
 
 class Link:
-    def __init__(self, link, driver, sleep=0, headless=False, sleep_notifications=True):
+    def __init__(self, link, sleep:int,  driver="Chrome", headless=False, delay_notifications=False):
 
         self.headless = headless
         self.link = link
-        self.sleep = sleep
         self.driver = driver
-        self.sleep_notifications = sleep_notifications
+        self.sleep = sleep
+        self.delay_notification = delay_notifications
 
 
-
-    @staticmethod
-    def wait(action):
-        def wrapper(self, *args, **kwargs):
-            x = 0
-            while x == 0:
-                try:
-                    action(self, *args, **kwargs)
-                    x += 1
-
-                except Exception as e:
-                    print(e)
-        
-        return wrapper
-    
-    @staticmethod
-    def sleep_wait(action):
-        def wrapper(self, *args, **kwargs):
-            if self.sleep_notifications:
+    def _delay(self):
+        if self.sleep > 0:
+            if self.delay_notification:
                 print(f'Waiting {self.sleep} seconds...')
             time.sleep(self.sleep)
-            action(self, *args, **kwargs)
-        
-        return wrapper
+
 
 
     def openLink(self):
@@ -91,22 +73,21 @@ class Link:
         self.actions = ActionChains(self.driver)
         time.sleep(5)
 
-    @sleep_wait
     def quitSite(self):
+        self._delay()
         self.driver.quit()
     
-    @sleep_wait
     def maximize(self):
+        self._delay()
         self.driver.maximize_window()
-
-    @sleep_wait
+        
     def switchToAlert(self):
+        self._delay()
         new_driver = self.driver.switch_to.alert
-
         return new_driver
 
-    @sleep_wait
     def waitElementClickable(self, elementXpath):
+        self._delay()
         try:
             WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, elementXpath)))
             return True
@@ -114,77 +95,69 @@ class Link:
         except:
             return False
 
-    @sleep_wait         
-    @wait
     def clickElement(self, elementXpath):
+        self._delay()
         WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, elementXpath))).click()
 
-    @sleep_wait
-    @wait
     def sendKeys(self, elementXpath, text):
+        self._delay()
         WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, elementXpath))).send_keys(text)
 
-    @sleep_wait
-    @wait
     def clearField(self, elementXpath):
+        self._delay()
         WebDriverWait(self.driver, 20).until(EC.element_to_be_selected((By.XPATH, elementXpath))).clear()
 
-    @sleep_wait
-    @wait
     def getValue(self, elementXpath):
+        self._delay()
         element = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, elementXpath)))
         return element.get_attribute('value')
     
-    @sleep_wait
     def pressEnter(self):
+        self._delay()
         self.actions.send_keys(keys.Keys.ENTER)
         self.actions.perform()
 
-    @sleep_wait
     def pressTab(self):
+        self._delay()
         self.actions.send_keys(keys.Keys.TAB)
         self.actions.perform()
 
-    @sleep_wait
     def pressDown(self):
+        self._delay()
         self.actions.send_keys(keys.Keys.DOWN)
         self.actions.perform()
 
-    @sleep_wait
     def pressUp(self):
+        self._delay()
         self.actions.send_keys(keys.Keys.UP)
         self.actions.perform()
 
-    @sleep_wait
-    @wait
     def clearText(self, elementXpath):
+        self._delay()
         self.driver.find_element(By.XPATH, elementXpath).click()
         self.actions.key_down(keys.Keys.CONTROL).send_keys('a').key_up(keys.Keys.CONTROL).perform()
         self.driver.find_element(By.XPATH, elementXpath).send_keys(keys.Keys.BACKSPACE)
 
-    @sleep_wait
-    @wait
     def sendKeysName(self, elementName, text):
+        self._delay()
         WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.NAME, elementName))).send_keys(text)
 
-    @sleep_wait
     def switchWindow(self, index:int):
+        self._delay()
         self.driver.switch_to.window(self.driver.window_handles[index])
 
-    @sleep_wait
-    @wait
     def switchSelector(self, cssSelector):
+        self._delay()
         frame = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, cssSelector)))
         self.driver.switch_to.frame(frame)
 
-    @sleep_wait
-    @wait
     def switchFrameXpath(self, xpath):
+        self._delay()
         frame = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, xpath)))
         self.driver.switch_to.frame(frame)
 
-    @sleep_wait
     def elementExist(self, xpath):
+        self._delay()
         try:
             self.driver.find_element(By.XPATH, xpath)
             return True
