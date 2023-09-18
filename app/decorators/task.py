@@ -4,8 +4,9 @@ def task(name:str, detail:bool=False):
     def decorator(action):
         def wrapper(*args, **kwargs):
             try:
-                action()
+                result =  action()
                 print(f'Success on task: {name}')
+                return result
             except Exception as e:
                 print(f'''
 Fail on task: {name}
@@ -28,9 +29,10 @@ def persistent_task(name:str, detail:bool=False):
             count = 0
             while x == 0:
                 try:
-                    action()
+                    result = action()
                     print(f'Success on task: {name}')
                     x += 1
+                    return result     
                 except Exception as e:
                     count += 1
                     print(f'''
