@@ -31,6 +31,8 @@ class Link:
 
         match self.driver:
             case "Chrome":
+                options = webdriver.ChromeOptions()
+                options.add_experimental_option('excludeSwitches', ['enable-logging'])
                 if self.headless == True:
                     print('Headless mode is not implemented yet, turning to false automatically...')
                     self.headless = False
@@ -49,10 +51,10 @@ class Link:
                     
                     if os.path.exists(driver_path):
                         service = Service(driver_path)
-                        self.driver = webdriver.Chrome(options=Options(), service=service)
+                        self.driver = webdriver.Chrome(options=options, service=service)
 
                     else:
-                        self.driver = webdriver.Chrome(options=Options())
+                        self.driver = webdriver.Chrome(options=options)
 
                 elif self.headless == False:
                     current_path = os.path.abspath(__file__)
@@ -61,10 +63,10 @@ class Link:
                     
                     if os.path.exists(driver_path):
                         service = Service(driver_path)
-                        self.driver = webdriver.Chrome(options=Options(), service=service)
+                        self.driver = webdriver.Chrome(options=options, service=service)
 
                     else:
-                        self.driver = webdriver.Chrome(options=Options())
+                        self.driver = webdriver.Chrome(options=options)
 
             case "Firefox":
                 self.driver = webdriver.Firefox(options=Options())

@@ -4,3 +4,5 @@ def execute_tasks(*args):
             action()
         except:
             break
+
+    print('Execution terminated.')
