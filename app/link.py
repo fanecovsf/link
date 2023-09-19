@@ -87,6 +87,18 @@ class Link:
         self._delay()
         new_driver = self.driver.switch_to.alert
         return new_driver
+    
+    def moveTo(self, elementXpath):
+        self._delay()
+        element = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, elementXpath)))
+        self.actions.move_to_element(element)
+        self.actions.perform()
+
+    def rightClick(self, elementXpath):
+        self._delay()
+        element = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, elementXpath)))
+        self.actions.context_click(element)
+        self.actions.perform()
 
     def waitElementClickable(self, elementXpath):
         self._delay()
