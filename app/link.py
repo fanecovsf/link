@@ -178,3 +178,6 @@ class Link:
         except:
             return False
         
+    def takeScreenshot(self, path):
+        self.driver.save_screenshot(path)
+        
