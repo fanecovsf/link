@@ -10,13 +10,14 @@ import time
 import os
 
 class Link:
-    def __init__(self, link, sleep:int,  driver="Chrome", headless=False, delay_notifications=False):
+    def __init__(self, link, sleep:int,  driver="Chrome", headless=False, delay_notifications=False, driver_path=None):
 
         self.headless = headless
         self.link = link
         self.driver = driver
         self.sleep = sleep
         self.delay_notification = delay_notifications
+        self.driver_path = driver_path
 
 
     def _delay(self):
@@ -45,24 +46,17 @@ class Link:
                     self.driver = webdriver.Chrome(options=options)
                     self.driver.implicitly_wait(5)
                     '''
-                    current_path = os.path.abspath(__file__)
-                    current_path = os.path.dirname(current_path)
-                    driver_path = os.path.join(current_path, 'chromedriver.exe')
                     
-                    if os.path.exists(driver_path):
-                        service = Service(driver_path)
+                    if os.path.exists(self.driver_path):
+                        service = Service(self.driver_path)
                         self.driver = webdriver.Chrome(options=options, service=service)
 
                     else:
                         self.driver = webdriver.Chrome(options=options)
 
                 elif self.headless == False:
-                    current_path = os.path.abspath(__file__)
-                    current_path = os.path.dirname(current_path)
-                    driver_path = os.path.join(current_path, 'chromedriver.exe')
-                    
-                    if os.path.exists(driver_path):
-                        service = Service(driver_path)
+                    if os.path.exists(self.driver_path):
+                        service = Service(self.driver_path)
                         self.driver = webdriver.Chrome(options=options, service=service)
 
                     else:
