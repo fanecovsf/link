@@ -55,9 +55,10 @@ class Link:
                         self.driver = webdriver.Chrome(options=options)
 
                 elif self.headless == False:
-                    if os.path.exists(self.driver_path):
-                        service = Service(self.driver_path)
-                        self.driver = webdriver.Chrome(options=options, service=service)
+                    if self.driver_path:
+                        if os.path.exists(self.driver_path):
+                            service = Service(self.driver_path)
+                            self.driver = webdriver.Chrome(options=options, service=service)
 
                     else:
                         self.driver = webdriver.Chrome(options=options)
