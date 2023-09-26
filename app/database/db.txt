@@ -1,0 +1,5 @@
+db_kind=sqlite
+username=
+password=
+host=
+port=
