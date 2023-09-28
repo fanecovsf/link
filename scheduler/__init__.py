@@ -2,6 +2,11 @@ import psutil
 import socket
 import requests
 import time
+import os
+from pathlib import Path
+
+
+AUTO_DIRS = Path(__file__).parent.parent / 'auto'
 
 def get_ipv4_address(interface_name):
     try:
@@ -23,3 +28,6 @@ while online == False:
     except:
         print('Aguardando 3 segundos...')
         time.sleep(3)
+
+if online == True:
+    ...
