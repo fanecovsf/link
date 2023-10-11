@@ -126,6 +126,11 @@ class Link:
         self.actions.send_keys(keys.Keys.ENTER)
         self.actions.perform()
 
+    def pressF11(self):
+        self._delay()
+        self.actions.send_keys(keys.Keys.F11)
+        self.actions.perform()
+
     def pressTab(self):
         self._delay()
         self.actions.send_keys(keys.Keys.TAB)
