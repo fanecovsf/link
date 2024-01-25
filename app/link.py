@@ -9,6 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import time
 from typing import Literal
 from .exceptions import KeyException, ExecutionException
+import platform
 
 class Link:
     """
@@ -137,13 +138,13 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def clearField(self, elementXpath: str):
+    def clearField(self, elementXpath: str) -> None:
         """
         Método utilizado para limpar um campo de texto baseado em seu xpath
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.element_to_be_selected((By.XPATH, elementXpath))).clear()
+            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, elementXpath))).clear()
         except Exception as e:
             raise ExecutionException(str(e))
     
@@ -176,11 +177,17 @@ class Link:
         """
         Método utilizado para limpar um campo de texto 'manualmente' ou seja, usando o teclado
         É mais recomendado utilizar o método clearField ao invés desse
+        Método tem suporte para MacOS, trocando o ctrl para command
         """
         try:
             self._delay()
             self.driver.find_element(By.XPATH, elementXpath).click()
-            self.actions.key_down(keys.Keys.CONTROL).send_keys('a').key_up(keys.Keys.CONTROL).perform()
+
+            if platform.system() == 'Darwin':
+                self.actions.key_down(keys.Keys.COMMAND).send_keys('a').key_up(keys.Keys.COMMAND).perform()
+            else: 
+                self.actions.key_down(keys.Keys.CONTROL).send_keys('a').key_up(keys.Keys.CONTROL).perform()
+
             self.driver.find_element(By.XPATH, elementXpath).send_keys(keys.Keys.BACKSPACE)
         except Exception as e:
             raise ExecutionException(str(e))
