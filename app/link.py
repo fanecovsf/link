@@ -72,14 +72,15 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
         
-    def switch_to_alert(self) -> Alert:
+    def accept_alert(self) -> None:
         """
         Método utilizado para trocar o foco do script para o alerta do navegador
         """
         try:
             self._delay()
             new_driver = self.driver.switch_to.alert
-            return new_driver
+            new_driver.accept()
+
         except Exception as e:
             raise ExecutionException(str(e))
     
@@ -197,13 +198,13 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def send_keys_by_name(self, elementName: str, text: str) -> None:
+    def send_keys_by_name(self, element_name: str, text: str) -> None:
         """
         Método utilizado para digitar algo em um campo de texto baseado no seu name
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.NAME, elementName))).send_keys(text)
+            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.NAME, element_name))).send_keys(text)
         except Exception as e:
             raise ExecutionException(str(e))
 
@@ -217,7 +218,7 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def switch_to_frame_xpath(self, xpath: str) -> None:
+    def switch_to_frame(self, xpath: str) -> None:
         """
         Método utilizado para trocar o script para um iframe baseado em seu xpath
         """
