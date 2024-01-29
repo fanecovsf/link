@@ -29,3 +29,36 @@ class ExecutionException(LinkException):
         self.message = message
 
         super().__init__(self.message)
+
+
+class EmailException(LinkException):
+    """
+    Exception para capturar erro no envio de email
+    """
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+
+        super().__init__(self.message)
+
+
+class AttachmentException(LinkException):
+    """
+    Exception para capturar erro nos anexos do email
+    """
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+
+        super().__init__(self.message)
+
+
+class PathException(LinkException):
+    """
+    Exception para capturar caso o path do arquivo não exista
+    """
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+
+        super().__init__(self.message)
