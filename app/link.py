@@ -31,7 +31,7 @@ class Link:
             time.sleep(self.sleep)
 
 
-    def openLink(self) -> None:
+    def open_link(self) -> None:
         """
         Função inicial para abertura da url indicada
         irá definir as configurações padrão do navegador antes de abrir
@@ -52,7 +52,7 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def quitSite(self) -> None:
+    def quit_site(self) -> None:
         """
         Método utilizado para fechar o navegador
         """
@@ -72,7 +72,7 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
         
-    def switchToAlert(self) -> Alert:
+    def switch_to_alert(self) -> Alert:
         """
         Método utilizado para trocar o foco do script para o alerta do navegador
         """
@@ -83,72 +83,74 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
     
-    def moveTo(self, elementXpath: str) -> None:
+    def move_to(self, element_xpath: str) -> None:
         """
         Método utilizado para mover o cursor para o elemento baseado em seu xpath
         """
         try:
             self._delay()
-            element = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, elementXpath)))
-            self.actions.move_to_element(element)
+            self.actions.move_to_element(
+                WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath)))
+            )
             self.actions.perform()
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def rightClick(self, elementXpath: str) -> None:
+    def right_click(self, element_xpath: str) -> None:
         """
         Método utilizado para performar um clique direito em um elemento baseado em seu xpath
         """
         try:
             self._delay()
-            element = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, elementXpath)))
-            self.actions.context_click(element)
+            self.actions.context_click(
+                WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath)))
+            )
             self.actions.perform()
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def waitElementClickable(self, elementXpath: str) -> bool:
+    def wait_element_clickable(self, element_xpath: str) -> bool:
         """
         Método utilizado para aguardar por 60 segundos um elemento se tornar clicável baseado no seu xpath, retorna True quando o elemento for clicável
         """
         try:
             self.delay()
-            WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, elementXpath)))
+            WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, element_xpath)))
             return True
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def clickElement(self, elementXpath: str) -> None:
+    def click_element(self, element_xpath: str) -> None:
         """
         Método utilizado para para clicar em um elemento baseado no seu xpath
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, elementXpath))).click()
+            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath))).click()
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def sendKeys(self, elementXpath: str, text: str) -> None:
+    def send_keys(self, element_xpath: str, text: str) -> None:
         """
         Método utilizado para digitar algo em um campo de texto baseado em seu xpath
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, elementXpath))).send_keys(text)
+            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, element_xpath))).send_keys(text)
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def clearField(self, elementXpath: str) -> None:
+    def clear_field(self, element_xpath: str) -> None:
         """
         Método utilizado para limpar um campo de texto baseado em seu xpath
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, elementXpath))).clear()
+            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, element_xpath))).clear()
         except Exception as e:
             raise ExecutionException(str(e))
     
-    def pressKey(self, key: str) -> bool:
+    def press_key(self, key: str) -> bool:
         """
         Método utilizado para pressionar a tecla baseado na string passada
         """
@@ -173,7 +175,7 @@ class Link:
         
         raise KeyException(key, key_map)
 
-    def clearText(self, elementXpath: str) -> None:
+    def clear_text(self, element_xpath: str) -> None:
         """
         Método utilizado para limpar um campo de texto 'manualmente' ou seja, usando o teclado
         É mais recomendado utilizar o método clearField ao invés desse
@@ -181,18 +183,21 @@ class Link:
         """
         try:
             self._delay()
-            self.driver.find_element(By.XPATH, elementXpath).click()
+            self.driver.find_element(By.XPATH, element_xpath).click()
 
-            if platform.system() == 'Darwin':
-                self.actions.key_down(keys.Keys.COMMAND).send_keys('a').key_up(keys.Keys.COMMAND).perform()
-            else: 
-                self.actions.key_down(keys.Keys.CONTROL).send_keys('a').key_up(keys.Keys.CONTROL).perform()
+            system_map = {
+                'Darwin': self.actions.key_down(keys.Keys.COMMAND).send_keys('a').key_up(keys.Keys.COMMAND).perform(),
+                'Windows': self.actions.key_down(keys.Keys.CONTROL).send_keys('a').key_up(keys.Keys.CONTROL).perform(),
+                'Linux': self.actions.key_down(keys.Keys.CONTROL).send_keys('a').key_up(keys.Keys.CONTROL).perform(),
+            }
 
-            self.driver.find_element(By.XPATH, elementXpath).send_keys(keys.Keys.BACKSPACE)
+            system_map[platform.system()]
+
+            self.driver.find_element(By.XPATH, element_xpath).send_keys(keys.Keys.BACKSPACE)
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def sendKeysName(self, elementName: str, text: str) -> None:
+    def send_keys_by_name(self, elementName: str, text: str) -> None:
         """
         Método utilizado para digitar algo em um campo de texto baseado no seu name
         """
@@ -202,7 +207,7 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def switchWindow(self, index:int) -> None:
+    def switch_window(self, index:int) -> None:
         """
         Método utilizado para alterar a aba de navegação baseado no index (primeira aba = index 0, segunda aba = index 1, etc...)
         """
@@ -212,18 +217,19 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def switchFrameXpath(self, xpath: str) -> None:
+    def switch_to_frame_xpath(self, xpath: str) -> None:
         """
         Método utilizado para trocar o script para um iframe baseado em seu xpath
         """
         try:
             self._delay()
-            frame = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, xpath)))
-            self.driver.switch_to.frame(frame)
+            self.driver.switch_to.frame(
+                WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, xpath)))
+            )
         except Exception as e:
             raise ExecutionException(str(e))
 
-    def elementExists(self, xpath: str) -> bool:
+    def element_exists(self, xpath: str) -> bool:
         """
         Método utilizado para saber se um elemento existe (retorna True ou False)
         """
@@ -234,7 +240,7 @@ class Link:
         except Exception as e:
             raise ExecutionException(str(e))
         
-    def takeScreenshot(self, path: str) -> None:
+    def take_screenshot(self, path: str) -> None:
         """
         Método utilizado para tirar screenshot da tela do navegador, é salvo no caminho do path
         """

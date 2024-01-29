@@ -12,7 +12,6 @@ class Email:
     """
     Classe para criar uma instância de email, usado para enviar avisos, alertas, etc...
     """
-
     def __init__(
             self,
             smtp_server: str,
