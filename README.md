@@ -101,14 +101,23 @@ link_instance.take_screenshot(path)
 
 Classe base para enviar email usando autenticação SMTP, recebe como parâmetro:
 **smtp_server**: string do servidor smtp
+
 **smtp_port**: integer da porta do servidor smtp
+
 **smtp_username**: string do username para autenticação
+
 **smtp_password**: string com a senha para autenticação
+
 **subject**: string com o assunto do email
+
 **email_body**: string com o conteúdo do corpo do email (em HTML ou string)
+
 **html_body**: boolean, False como padrão, deverá ser mudado para True caso passe um body em html no parâmetro 'email_body'
+
 **receivers**: list de string com todos os endereços que irão receber o email
+
 **attachments**: list de string com todos os caminhos para arquivos que serão enviados como anexo
+
 **cco**: list de string contendo todos os endereços que irão receber o email como cópia oculta
 
 #### Importando a biblioteca:
