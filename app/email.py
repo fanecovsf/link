@@ -24,6 +24,7 @@ class Email:
             email_body: str,
             attachments: List[str] = None,
             cco: List[str] = None,
+            html_body: bool = False,
     ) -> None:
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
@@ -34,6 +35,7 @@ class Email:
         self.subject = subject
         self.email_body = email_body
         self.attachments = attachments
+        self.html_body = html_body
     
     
     @property
@@ -66,7 +68,12 @@ class Email:
 
         msg['Subject'] = self.subject
 
-        msg.attach(MIMEText(self.email_body, 'plain'))
+        body_map = {
+            True: 'html',
+            False: 'plain',
+        }
+
+        msg.attach(MIMEText(self.email_body, body_map[self.html_body]))
 
         return msg
 
