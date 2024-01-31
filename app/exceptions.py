@@ -55,7 +55,18 @@ class AttachmentException(LinkException):
 
 class PathException(LinkException):
     """
-    Exception para capturar caso o path do arquivo não exista
+    Exception para capturar erro caso o path do arquivo não exista
+    """
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+
+        super().__init__(self.message)
+
+
+class DriverDownloadException(LinkException):
+    """
+    Exception para capturar erro caso a atualização do driver falhe
     """
 
     def __init__(self, message: str) -> None:
