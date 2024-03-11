@@ -179,7 +179,7 @@ class Link:
         Método utilizado para aguardar por 60 segundos um elemento se tornar clicável baseado no seu xpath, retorna True quando o elemento for clicável
         """
         try:
-            self.delay()
+            self._delay()
             WebDriverWait(self.browser, 60).until(EC.visibility_of_element_located((By.XPATH, element_xpath)))
             return True
         except Exception as e:
@@ -192,6 +192,16 @@ class Link:
         try:
             self._delay()
             WebDriverWait(self.browser, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath))).click()
+        except Exception as e:
+            raise ExecutionException(str(e))
+        
+    def click_query(self, query: str) -> None:
+        """
+        Método utilizado para enviar clique com base em uma query do elemento
+        """
+        try:
+            self._delay()
+            WebDriverWait(self.browser, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, query))).click()
         except Exception as e:
             raise ExecutionException(str(e))
 
