@@ -248,4 +248,14 @@ class Link:
         try:
             self.driver.save_screenshot(path)
         except Exception as e:
-            raise ExecutionException(str(e))        
+            raise ExecutionException(str(e))
+
+    def element_text(self, xpath: str) -> str:
+        """
+        Método utilizado para extrair o valor em string dentro da tag HTML baseado no xpath
+        """
+        try:
+            self._delay()
+            return WebDriverWait(self.browser, 20).until(EC.visibility_of_element_located((By.XPATH, xpath))).text
+        except Exception as e:
+            raise ExecutionException(str(e))
