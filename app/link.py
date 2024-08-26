@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common import keys
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
@@ -10,6 +9,8 @@ import time
 from typing import Literal
 from .exceptions import KeyException, ExecutionException
 import platform
+from pyvirtualdisplay import Display
+import os
 
 class Link:
     """
@@ -18,11 +19,13 @@ class Link:
     sleep: o tempo de delay padrão entre um comando e outro
     driver: string que só aceita 'Chrome' ou 'Firefox' como valor para definir o navegador a ser usado
     """
-    def __init__(self, url: str, sleep: int,  driver: Literal['Chrome', 'Firefox'] = 'Chrome') -> None:
+    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, log_path: str = '') -> None:
 
         self.url = url
         self.driver = driver
         self.sleep = sleep
+        self.headless = headless
+        self.display = Display(visible=0, size=(1280, 800))
 
 
     # Função para implementação do delay padrão entre as execuções
@@ -40,6 +43,22 @@ class Link:
         try:
             if self.driver == "Chrome":
                 options = webdriver.ChromeOptions()
+                if self.headless:
+                    prefs = {
+                        "download.default_directory": '/root/Downloads',  
+                        "download.prompt_for_download": False,       
+                        "directory_upgrade": True,                   
+                        "safebrowsing.enabled": True                 
+                    }
+                    
+                    options.add_experimental_option("prefs", prefs)
+                    options.add_argument('--headless')
+                    options.add_argument('--no-sandbox')
+                    options.add_argument('--disable-dev-shm-usage')
+                    options.add_argument('--disable-gpu')
+
+                    self.display.start()
+                    
                 options.add_experimental_option('excludeSwitches', ['enable-logging'])
                 self.driver = webdriver.Chrome(options=options)
 
@@ -59,6 +78,7 @@ class Link:
         try:
             self._delay()
             self.driver.quit()
+            self.display.stop()
         except Exception as e:
             raise ExecutionException(str(e))
     
@@ -115,7 +135,7 @@ class Link:
         Método utilizado para aguardar por 60 segundos um elemento se tornar clicável baseado no seu xpath, retorna True quando o elemento for clicável
         """
         try:
-            self.delay()
+            self._delay()
             WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, element_xpath)))
             return True
         except Exception as e:
@@ -256,6 +276,16 @@ class Link:
         """
         try:
             self._delay()
-            return WebDriverWait(self.browser, 20).until(EC.visibility_of_element_located((By.XPATH, xpath))).text
+            return WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, xpath))).text
+        except Exception as e:
+            raise ExecutionException(str(e))
+        
+    def click_query(self, query: str) -> None:
+        """
+        Método utilizado para enviar clique com base em uma query do elemento
+        """
+        try:
+            self._delay()
+            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, query))).click()
         except Exception as e:
             raise ExecutionException(str(e))
