@@ -78,7 +78,8 @@ class Link:
         try:
             self._delay()
             self.driver.quit()
-            self.display.stop()
+            if self.headless:
+                self.display.stop()
         except Exception as e:
             raise ExecutionException(str(e))
     
