@@ -25,7 +25,7 @@ class Link:
         self.driver = driver
         self.sleep = sleep
         self.headless = headless
-        self.display = Display(visible=0, size=(1280, 800))
+        self.display = Display(visible=0, size=(1920, 1080))
 
 
     # Função para implementação do delay padrão entre as execuções
@@ -56,6 +56,9 @@ class Link:
                     options.add_argument('--no-sandbox')
                     options.add_argument('--disable-dev-shm-usage')
                     options.add_argument('--disable-gpu')
+                    options.add_argument('--window-size=1920,1080')
+                    options.add_argument('--start-maximized')
+                    options.add_argument('--disable-features=VizDisplayCompositor')
 
                     self.display.start()
                     
@@ -288,5 +291,14 @@ class Link:
         try:
             self._delay()
             WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, query))).click()
+        except Exception as e:
+            raise ExecutionException(str(e))
+        
+    def refresh(self) -> None:
+        """
+        Método utilizado para dar refresh na página
+        """
+        try:
+            self.driver.refresh()
         except Exception as e:
             raise ExecutionException(str(e))
