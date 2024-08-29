@@ -25,7 +25,7 @@ class Link:
         self.driver = driver
         self.sleep = sleep
         self.headless = headless
-        self.display = Display(visible=0, size=(1920, 1080))
+        self.display = Display(visible=0, size=(1960, 1080))
 
 
     # Função para implementação do delay padrão entre as execuções
@@ -56,7 +56,7 @@ class Link:
                     options.add_argument('--no-sandbox')
                     options.add_argument('--disable-dev-shm-usage')
                     options.add_argument('--disable-gpu')
-                    options.add_argument('--window-size=1920,1080')
+                    options.add_argument('--window-size=1960,1080')
                     options.add_argument('--start-maximized')
                     options.add_argument('--disable-features=VizDisplayCompositor')
 
@@ -115,7 +115,7 @@ class Link:
         try:
             self._delay()
             self.actions.move_to_element(
-                WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath)))
+                WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((By.XPATH, element_xpath)))
             )
             self.actions.perform()
         except Exception as e:
@@ -128,7 +128,7 @@ class Link:
         try:
             self._delay()
             self.actions.context_click(
-                WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath)))
+                WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((By.XPATH, element_xpath)))
             )
             self.actions.perform()
         except Exception as e:
@@ -151,7 +151,7 @@ class Link:
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, element_xpath))).click()
+            WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((By.XPATH, element_xpath))).click()
         except Exception as e:
             raise ExecutionException(str(e))
 
@@ -161,7 +161,7 @@ class Link:
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, element_xpath))).send_keys(text)
+            WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, element_xpath))).send_keys(text)
         except Exception as e:
             raise ExecutionException(str(e))
 
@@ -171,7 +171,7 @@ class Link:
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, element_xpath))).clear()
+            WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, element_xpath))).clear()
         except Exception as e:
             raise ExecutionException(str(e))
     
@@ -228,7 +228,7 @@ class Link:
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.NAME, element_name))).send_keys(text)
+            WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.NAME, element_name))).send_keys(text)
         except Exception as e:
             raise ExecutionException(str(e))
 
@@ -249,7 +249,7 @@ class Link:
         try:
             self._delay()
             self.driver.switch_to.frame(
-                WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, xpath)))
+                WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, xpath)))
             )
         except Exception as e:
             raise ExecutionException(str(e))
@@ -280,7 +280,7 @@ class Link:
         """
         try:
             self._delay()
-            return WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, xpath))).text
+            return WebDriverWait(self.driver, 60).until(EC.visibility_of_element_located((By.XPATH, xpath))).text
         except Exception as e:
             raise ExecutionException(str(e))
         
@@ -290,7 +290,7 @@ class Link:
         """
         try:
             self._delay()
-            WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, query))).click()
+            WebDriverWait(self.driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, query))).click()
         except Exception as e:
             raise ExecutionException(str(e))
         
