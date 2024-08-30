@@ -312,6 +312,7 @@ class Link:
         Método para executar javascript na instância
         """
         try:
+            self._delay()
             self.driver.execute_script(script)
         except Exception as e:
             raise ExecutionException(str(e))
