@@ -45,7 +45,7 @@ class Link:
                 options = webdriver.ChromeOptions()
                 if self.headless:
                     prefs = {
-                        "download.default_directory": '/root/Downloads',  
+                        "download.default_directory": '/home/ghf/Downloads',  
                         "download.prompt_for_download": False,       
                         "directory_upgrade": True,                   
                         "safebrowsing.enabled": True                 
@@ -59,6 +59,10 @@ class Link:
                     options.add_argument('--window-size=1960,1080')
                     options.add_argument('--start-maximized')
                     options.add_argument('--disable-features=VizDisplayCompositor')
+                    options.add_argument('--ignore-certificate-errors')
+                    options.add_argument('--allow-running-insecure-content')
+                    options.add_argument('--disable-blink-features=AutomationControlled')
+                    options.add_argument('--enable-automation')
 
                     self.display.start()
                     
@@ -300,5 +304,14 @@ class Link:
         """
         try:
             self.driver.refresh()
+        except Exception as e:
+            raise ExecutionException(str(e))
+        
+    def execute_script(self, script: str) -> None:
+        """
+        Método para executar javascript na instância
+        """
+        try:
+            self.driver.execute_script(script)
         except Exception as e:
             raise ExecutionException(str(e))
