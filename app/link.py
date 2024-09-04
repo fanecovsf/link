@@ -6,11 +6,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 import time
-from typing import Literal
+from typing import Literal, Optional
 from .exceptions import KeyException, ExecutionException
 import platform
 from pyvirtualdisplay import Display
-import os
+import platform
+from pathlib import Path
 
 class Link:
     """
@@ -19,13 +20,14 @@ class Link:
     sleep: o tempo de delay padrão entre um comando e outro
     driver: string que só aceita 'Chrome' ou 'Firefox' como valor para definir o navegador a ser usado
     """
-    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, log_path: str = '') -> None:
+    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, download_path: Optional[str] = Path.home() / "Downloads") -> None:
 
         self.url = url
         self.driver = driver
         self.sleep = sleep
         self.headless = headless
-        self.display = Display(visible=0, size=(1960, 1080))
+        self.display = Display(visible=0, size=(1960, 1080)) if platform.system() == 'Linux' else None
+        self.download_path = download_path
 
 
     # Função para implementação do delay padrão entre as execuções
@@ -43,15 +45,20 @@ class Link:
         try:
             if self.driver == "Chrome":
                 options = webdriver.ChromeOptions()
-                if self.headless:
-                    prefs = {
-                        "download.default_directory": '/home/ghf/Downloads',  
-                        "download.prompt_for_download": False,       
-                        "directory_upgrade": True,                   
-                        "safebrowsing.enabled": True                 
-                    }
+                if platform.system() == 'Windows' or platform.system() == 'Darwin':
+                    print('Headless mode is just supported on Linux OS.')
+                    self.headless = False
+
+                prefs = {
+                    "download.default_directory": self.download_path,  
+                    "download.prompt_for_download": False,       
+                    "directory_upgrade": True,                   
+                    "safebrowsing.enabled": True                 
+                }
                     
-                    options.add_experimental_option("prefs", prefs)
+                options.add_experimental_option("prefs", prefs)
+
+                if self.headless:
                     options.add_argument('--headless')
                     options.add_argument('--no-sandbox')
                     options.add_argument('--disable-dev-shm-usage')
