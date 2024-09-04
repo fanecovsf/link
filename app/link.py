@@ -11,7 +11,7 @@ from .exceptions import KeyException, ExecutionException
 import platform
 from pyvirtualdisplay import Display
 import platform
-from pathlib import Path
+
 
 class Link:
     """
