@@ -20,7 +20,7 @@ class Link:
     sleep: o tempo de delay padrão entre um comando e outro
     driver: string que só aceita 'Chrome' ou 'Firefox' como valor para definir o navegador a ser usado
     """
-    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, download_path: Optional[str] = Path.home() / "Downloads") -> None:
+    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, download_path: Optional[str] = None) -> None:
 
         self.url = url
         self.driver = driver
@@ -49,8 +49,10 @@ class Link:
                     print('Headless mode is just supported on Linux OS.')
                     self.headless = False
 
+                if self.download_path:
+                    prefs['download.default_directory'] = self.download_path
+
                 prefs = {
-                    "download.default_directory": self.download_path,  
                     "download.prompt_for_download": False,       
                     "directory_upgrade": True,                   
                     "safebrowsing.enabled": True                 
