@@ -199,7 +199,8 @@ class Link:
             'down': keys.Keys.DOWN,
             'up': keys.Keys.UP,
             'right': keys.Keys.RIGHT,
-            'left': keys.Keys.LEFT
+            'left': keys.Keys.LEFT,
+            'esc': keys.Keys.ESCAPE
         }
 
         if key.lower() in key_map:
@@ -276,7 +277,7 @@ class Link:
             self.driver.find_element(By.XPATH, xpath)
             return True
         except Exception as e:
-            raise ExecutionException(str(e))
+            return False
         
     def take_screenshot(self, path: str) -> None:
         """
