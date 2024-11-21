@@ -5,13 +5,12 @@ from selenium.webdriver.common import keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service as ChromeService
 import time
-from typing import Literal, Optional
+from typing import Literal
 from .exceptions import KeyException, ExecutionException
 import platform
 from pyvirtualdisplay import Display
-import platform
-
 
 class Link:
     """
@@ -20,14 +19,14 @@ class Link:
     sleep: o tempo de delay padrão entre um comando e outro
     driver: string que só aceita 'Chrome' ou 'Firefox' como valor para definir o navegador a ser usado
     """
-    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, download_path: Optional[str] = None) -> None:
+    def __init__(self, url: str, sleep: int, driver: Literal['Chrome', 'Firefox'] = 'Chrome', headless: bool = False, prod: bool = True) -> None:
 
         self.url = url
         self.driver = driver
         self.sleep = sleep
         self.headless = headless
-        self.display = Display(visible=0, size=(1960, 1080)) if platform.system() == 'Linux' else None
-        self.download_path = download_path
+        self.display = Display(visible=0, size=(1960, 1080))
+        self.prod = prod
 
 
     # Função para implementação do delay padrão entre as execuções
@@ -45,22 +44,15 @@ class Link:
         try:
             if self.driver == "Chrome":
                 options = webdriver.ChromeOptions()
-                if platform.system() == 'Windows' or platform.system() == 'Darwin':
-                    print('Headless mode is just supported on Linux OS.')
-                    self.headless = False
-
-                if self.download_path:
-                    prefs['download.default_directory'] = self.download_path
-
-                prefs = {
-                    "download.prompt_for_download": False,       
-                    "directory_upgrade": True,                   
-                    "safebrowsing.enabled": True                 
-                }
-                    
-                options.add_experimental_option("prefs", prefs)
-
                 if self.headless:
+                    prefs = {
+                        "download.default_directory": '/root/Downloads',  
+                        "download.prompt_for_download": False,       
+                        "directory_upgrade": True,                   
+                        "safebrowsing.enabled": True                 
+                    }
+                    
+                    options.add_experimental_option("prefs", prefs)
                     options.add_argument('--headless')
                     options.add_argument('--no-sandbox')
                     options.add_argument('--disable-dev-shm-usage')
@@ -76,7 +68,10 @@ class Link:
                     self.display.start()
                     
                 options.add_experimental_option('excludeSwitches', ['enable-logging'])
-                self.driver = webdriver.Chrome(options=options)
+                if self.prod:
+                    self.driver = webdriver.Chrome(options=options, service=ChromeService('/app/driver/chromedriver'))
+                else:
+                    self.driver = webdriver.Chrome(options=options, service=ChromeService())
 
             if self.driver == "Firefox":
                 self.driver = webdriver.Firefox(options=Options())
@@ -276,7 +271,7 @@ class Link:
             self._delay()
             self.driver.find_element(By.XPATH, xpath)
             return True
-        except Exception as e:
+        except:
             return False
         
     def take_screenshot(self, path: str) -> None:
